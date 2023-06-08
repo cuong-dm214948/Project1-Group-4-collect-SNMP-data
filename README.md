@@ -1,14 +1,30 @@
-# Project1-4-chuong-trinh-thu-thap-du-lieu-SNMP
-Đỗ Mạnh Cường 20214948
+## Project 1 - Group 4 - Collect SNMP data
 
-Đặng Minh Đức 20214956
+This is a project for the subject Project I at Hanoi University of Science and Technology by Dang Minh Duc and Do Manh Cuong.
 
-Lập trình xây dựng chương trình thu thập dữ liệu SNMP từ thiết bị mạng và máy chủ  bằng Java OOP
+# Topic detail
+Build a simple program to collect SNMP data from Windows and Linux.
 
-SNMP (Simple Network Management Protocol) là một giao thức tầng ứng dụng để trao đổi thông tin quản lý giữa các thiết bị mạng. Nó là một phần của Transmission Control Protocol/Internet Protocol (TCP/IP)
+# Students infomation
+Dang Minh Duc 20214956
 
-Giao thức SNMP là một trong những giao thức mạng được chấp nhận rộng rãi để quản lý và giám sát các phần tử mạng. Hầu hết các thiết bị mạng được cung cấp đi kèm với SNMP agent. Các agent này phải được kích hoạt và cấu hình để giao tiếp với các công cụ giám sát mạng hoặc hệ thống quản lý mạng (NMS).
+Email: duc.dm214956@sis.hust.edu.vn
 
-SNMP manager Là một phần mềm được cài đặt trên máy tính của người quản trị mạng và chịu trách nhiệm giám sát và điều khiển các thiết bị mạng từ xa. Manager gửi các yêu cầu SNMP đến các agent để lấy thông tin về các thiết bị mạng và xử lý các yêu cầu điều khiển.
+Do Manh Cuong : 20214948
 
-Thiết bị được quản lý hoặc phần tử mạng (router, windows, linux)
+Email: cuong.dm214948@sis.hust.edu.vn
+
+## API
+All API functions used in our project are in: 
+https://docs.google.com/spreadsheets/d/1bJRMyA5_oJdwGnzOhpqaaDpMviiOqHGiiGjhLIlxcmg/edit#gid=0
+
+## GUI App design
+https://balsamiq.cloud/sub69in/pno587s/r5009
+
+
+# Folder Structure
+
+The workspace contains two folders by default, where:
+
+- `src`: the folder to maintain sources
+- `lib`: the folder to maintain dependencies
