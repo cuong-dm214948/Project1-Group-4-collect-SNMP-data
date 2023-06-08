@@ -16,7 +16,7 @@ Email: cuong.dm214948@sis.hust.edu.vn
 
 ## API
 All API functions used in our project are in: 
-https://docs.google.com/spreadsheets/d/1bJRMyA5_oJdwGnzOhpqaaDpMviiOqHGiiGjhLIlxcmg/edit#gid=0
+
 
 ## GUI App design
 https://balsamiq.cloud/sub69in/pno587s/r5009
