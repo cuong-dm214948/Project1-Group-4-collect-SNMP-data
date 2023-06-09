@@ -1,7 +1,5 @@
 ## Project 1 - Group 4 - Collect SNMP data
 
-This is a project for the subject Project I at Hanoi University of Science and Technology by Dang Minh Duc and Do Manh Cuong.
-
 # Topic detail
 Build a simple program to collect SNMP data from Windows and Linux.
 
@@ -13,6 +11,9 @@ Email: duc.dm214956@sis.hust.edu.vn
 Do Manh Cuong : 20214948
 
 Email: cuong.dm214948@sis.hust.edu.vn
+# Overview
+Simple Network Management Protocol (SNMP) is an Internet Standard protocol for collecting and organizing information about managed devices on IP networks and for modifying that information to change device behaviour.
+
 
 
 
