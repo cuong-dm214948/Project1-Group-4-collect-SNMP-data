@@ -14,8 +14,6 @@ Do Manh Cuong : 20214948
 
 Email: cuong.dm214948@sis.hust.edu.vn
 
-## API
-All API functions used in our project are in: 
 
 
 
