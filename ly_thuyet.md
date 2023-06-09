@@ -89,7 +89,7 @@ OID của các object phổ biến có thể được chuẩn hóa, OID của c�
 
 VD : Muốn lấy tên của một PC chạy Windows, tên của một PC chạy Linux hoặc tên của một router thì SNMP application chỉ cần gửi bản tin có chứa OID là 1.3.6.1.2.1.1.5.0. Khi SNMP agent chạy trên PC Windows, PC Linux hay router nhận được bản tin có chứa OID 1.3.6.1.2.1.1.5.0, agent lập tức hiểu rằng đây là bản tin hỏi sysName.0, và agent sẽ trả lời bằng tên của hệ thống. Nếu SNMP agent nhận được một OID mà nó không hiểu (không hỗ trợ) thì nó sẽ không trả lời.
 
-<img src="https://i.imgur.com/9M7vo.jpg>
+<img src="https://i.imgur.com/9M7vo.jpg">
          
 Một trong các ưu điểm của SNMP là nó được thiết kế để chạy độc lập với các thiết bị khác nhau. Chính nhờ việc chuẩn hóa OID mà ta có thể dùng một SNMP application để lấy thông tin các loại device của các hãng khác nhau.
    
@@ -188,7 +188,14 @@ Người dùng có thể tự định nghĩa thêm các loại trap để làm p
 <img src="https://i.imgur.com/TupAV.jpg">
 
 Đối với các phương thức Get/Set/Response thì SNMP Agent lắng nghe ở port UDP 161, còn phương thức trap thì SNMP Trap Receiver lắng nghe ở port UDP 162.
-          
+         
+**SNMPwalk** là một công cụ dòng lệnh được sử dụng để truy vấn thông tin từ các thiết bị hỗ trợ SNMP. Nó hoạt động bằng cách gửi các yêu cầu SNMP GETNEXT tới các đối tượng (object) trên thiết bị và hiển thị kết quả trả về. Các đối tượng này được tổ chức thành một cây đối tượng (object tree) và mỗi đối tượng có một định danh duy nhất trong cây.
+Ví dụ, bạn có thể sử dụng SNMPwalk để truy vấn thông tin về các giao diện mạng trên một router, bao gồm địa chỉ IP, tốc độ truyền dữ liệu, trạng thái hoạt động, và các thông số khác. Công cụ này rất hữu ích trong việc giám sát và quản lý các thiết bị mạng.
+                                        
+**SNMPtable** là một công cụ dòng lệnh trong giao thức SNMP (Simple Network Management Protocol) được sử dụng để hiển thị dữ liệu bảng của các thiết bị mạng. Cụ thể, snmptable cho phép bạn lấy dữ liệu từ một bảng SNMP và hiển thị nó dưới dạng một bảng ASCII.
+Với snmptable, bạn có thể lấy thông tin từ các bảng SNMP như bảng định tuyến, bảng ARP, bảng MAC, v.v. Các thông tin này đều được sắp xếp theo cách chính xác và có thể được lọc hoặc sắp xếp lại theo nhu cầu sử dụng.
+Kết quả trả về từ snmptable thường được hiển thị dưới dạng một bảng gồm các cột và hàng, với mỗi hàng tương ứng với một bản ghi trong bảng SNMP. Các đối tượng SNMP trong bảng được lưu trữ dưới dạng OID (Object Identifier), và các giá trị của chúng được hiển thị dưới dạng chuỗi ASCII hoặc số.
+Snmptable là một công cụ hữu ích cho việc kiểm tra và giám sát các thiết bị mạng, đặc biệt là trong môi trường mạng lớn với nhiều thiết bị và các bảng SNMP phức tạp.
 ## Cấu trúc bản tin SNMP 
 
 SNMP chạy trên nền UDP. Cấu trúc của một bản tin SNMP bao gồm : version, community và data.
