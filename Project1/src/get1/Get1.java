@@ -112,7 +112,7 @@ public class Get1 {
 			DefaultUdpTransportMapping transport = new DefaultUdpTransportMapping();
 			snmp = new Snmp(transport);
 			snmp.listen();
-			System.out.println("-------> 发送PDU <-------");
+			
 			pdu.setType(PDU.GET);
 			ResponseEvent respEvent = snmp.send(pdu, target);
 			System.out.println("PeerAddress:" + respEvent.getPeerAddress());
@@ -159,13 +159,13 @@ public class Get1 {
 			DefaultUdpTransportMapping transport = new DefaultUdpTransportMapping();
 			snmp = new Snmp(transport);
 			snmp.listen();
-			System.out.println("-------> 发送PDU <-------");
+			
 			pdu.setType(PDU.GET);
 			ResponseEvent respEvent = snmp.send(pdu, target);
 			System.out.println("PeerAddress:" + respEvent.getPeerAddress());
 			PDU response = respEvent.getResponse();
 
-			/*异步获取*/
+	
 			final CountDownLatch latch = new CountDownLatch(1);
 			ResponseListener listener = new ResponseListener() {
 				public void onResponse(ResponseEvent event) {
