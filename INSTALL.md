@@ -17,13 +17,13 @@ Agent lưu trữ thông tin về các thiết bị mạng trong một cơ sở d
 
 Các phươn thức hoạt động bao gồm:
 + Snmp GetRequest được manager gửi đến agent để lấy một thông tin của một node cụ thể (chứa OID của object muốn lấy)
-VD: GetRequest OID=1.3.6.1.2.1.1.0 sẽ nhận được thông tin về tên đầy đủ và nhận dạng phiên bản của loại phần cứng của hệ thống, hệ điều hành phần mềm và phần mềm mạng.
+VD: GetRequest OID=1.3.6.1.2.1.1.1 sẽ nhận được thông tin về tên đầy đủ và nhận dạng phiên bản của loại phần cứng của hệ thống, hệ điều hành phần mềm và phần mềm mạng.
 
 + Snmp GetNextRequest cũng dùng để lấy thông tin tuy nhiên nó dùng để lấy thông tin của object nằm kế tiếp object được chỉ ra.
-VD: GetNextRequest OID=1.3.6.1.2.1.1.0 sẽ nhận được thông tin về nhận dạng có thẩm quyền của nhà cung cấp (nếu nhà cung cấp có thể gán định danh 1.3.6.1.4.1.424242.1.1) chứa OID=1.3.6.1.2.1.1.1.
+VD: GetNextRequest OID=1.3.6.1.2.1.1.1 sẽ nhận được thông tin về nhận dạng có thẩm quyền của nhà cung cấp (nếu nhà cung cấp có thể gán định danh 1.3.6.1.4.1.424242.1.1) chứa OID=1.3.6.1.2.1.1.2.
 
 + SNMPwalk sử dụng nhiều request Get-Next để truy xuất toàn bộ cây dữ liệu mạng từ một đối tượng được quản lý.
-VD: Snmp walk OID=1.3.6.1.2.1.1 sẽ nhận được thông tin về mô tả hệ thống(OID=1.3.6.1.2.1.1.0); nhận dạng nhà cung cấp (OID=1.3.6.1.2.1.1.0); mô tả thời gian khi phần quản lý mạng cuối cùng khởi tạo lại (OID=1.3.6.1.2.1.1.1); nhận dạng người liên hệ(OID=1.3.6.1.2.1.1.2) tên hệ thống(OID=1.3.6.1.2.1.1.4)...
+VD: Snmp walk OID=1.3.6.1.2.1.1 sẽ nhận được thông tin về mô tả hệ thống(OID=1.3.6.1.2.1.1.1); nhận dạng nhà cung cấp (OID=1.3.6.1.2.1.1.2); mô tả thời gian khi phần quản lý mạng cuối cùng khởi tạo lại (OID=1.3.6.1.2.1.1.3); nhận dạng người liên hệ(OID=1.3.6.1.2.1.1.4) tên hệ thống(OID=1.3.6.1.2.1.1.5)...
 
 + Message TRAP tạo bởi agent và gửi đến manager khi một sự kiện quan trọng xảy ra (cảnh báo cho manager) thay vì đợi yêu cầu từ manager.
 
