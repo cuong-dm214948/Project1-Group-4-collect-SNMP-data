@@ -203,3 +203,13 @@ SNMP chạy trên nền UDP. Cấu trúc của một bản tin SNMP bao gồm : 
 + Version : v1 = 0, v2c = 1, v2u = 2, v3 = 3.
 
 + Phần Data trong bản tin SNMP gọi là PDU (Protocol Data Unit). SNMPv1 có 5 phương thức hoạt động tương ứng 5 loại PDU. Tuy nhiên chỉ có 2 loại định dạng bản tin là PDU và Trap-PDU; trong đó các bản tin Get, GetNext, Set, GetResponse có cùng định dạng là PDU, còn bản tin Trap có định dạng là Trap-PDU.
+
+## Reference:
+
+https://docs.oracle.com/cd/E13203_01/tuxedo/tux91/snmpmref/1tmib.htm?fbclid=IwAR1l_h37KHcIs2MkcaIXtWSGzck8loX6LA4cMFejbH0zu5hrMsNda2xfVEw
+
+https://www.paessler.com/info/snmp_mibs_and_oids_an_overview?fbclid=IwAR1MLQ-gz8E5-uZXv8WwKYZYrlf3Ndt-78YPcvjHwEV51iXjpbyiBcSJM1k
+
+https://ireasoning.com/mibbrowser.shtml
+
+https://www.snmp4j.org/
