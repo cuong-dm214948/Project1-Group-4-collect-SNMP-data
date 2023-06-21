@@ -40,8 +40,9 @@ public class SnmpWalk {
 		target.setRetries(DEFAULT_RETRY);
 		return target;
 	}
-
-	public static void snmpWalk(String ip, String community, String targetOid) {
+	private static  String result;
+	public static String snmpWalk(String ip, String community, String targetOid) {
+		result = "-----SNMP query started-----\n";
 		CommunityTarget target = createDefault(ip, community);
 		TransportMapping transport = null;
 		Snmp snmp = null;
@@ -55,14 +56,14 @@ public class SnmpWalk {
 			pdu.add(new VariableBinding(targetOID));
 
 			boolean finished = false;
-			System.out.println("----> demo start <----");
+			
 			while (!finished) {
 				VariableBinding vb = null;
 				ResponseEvent respEvent = snmp.getNext(pdu, target);
 
 				PDU response = respEvent.getResponse();
 				if (null == response) {
-					System.out.println("responsePDU == null");
+					result += "responsePDU == null.\n";
 					finished = true;
 					break;
 				} else {
@@ -71,21 +72,20 @@ public class SnmpWalk {
 				// check finish
 				finished = checkWalkFinished(targetOID, pdu, vb);
 				if (!finished) {
-					System.out.println("==== walk each vlaue :");
-					System.out.println(vb.getOid() + " = " + vb.getVariable());
+					result += "Total request: " + response.size() + ".\n";
 
 					// Set up the variable binding for the next entry.
 					pdu.setRequestID(new Integer32(0));
 					pdu.set(0, vb);
 				} else {
-					System.out.println("SNMP walk OID has finished.");
+					result += "SNMP walk OID has finished.\n";
 					snmp.close();
 				}
 			}
-			System.out.println("----> demo end <----");
+			
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("SNMP walk Exception: " + e);
+			result += "SNMP walk Exception: " + e +".\n";
 		} finally {
 			if (snmp != null) {
 				try {
@@ -95,31 +95,32 @@ public class SnmpWalk {
 				}
 			}
 		}
+		return result += "-----SNMP query finished-----";
 	}
 
 	private static boolean checkWalkFinished(OID targetOID, PDU pdu,
 			VariableBinding vb) {
 		boolean finished = false;
 		if (pdu.getErrorStatus() != 0) {
-			System.out.println("[true] responsePDU.getErrorStatus() != 0 ");
-			System.out.println(pdu.getErrorStatusText());
+			result += "[true] responsePDU.getErrorStatus() != 0 \n";
+			result += pdu.getErrorStatusText() + "\n";
 			finished = true;
 		} else if (vb.getOid() == null) {
-			System.out.println("[true] vb.getOid() == null");
+			result += "[true] vb.getOid() == null\n";
 			finished = true;
 		} else if (vb.getOid().size() < targetOID.size()) {
-			System.out.println("[true] vb.getOid().size() < targetOID.size()");
+			result += "[true] vb.getOid().size() < targetOID.size()\n";
 			finished = true;
 		} else if (targetOID.leftMostCompare(targetOID.size(), vb.getOid()) != 0) {
-			System.out.println("[true] targetOID.leftMostCompare() != 0");
+			result += "[true] targetOID.leftMostCompare() != 0\n";
 			finished = true;
 		} else if (Null.isExceptionSyntax(vb.getVariable().getSyntax())) {
-			System.out.println("[true] Null.isExceptionSyntax(vb.getVariable().getSyntax())");
+			result += "[true] Null.isExceptionSyntax(vb.getVariable().getSyntax())\n";
 			finished = true;
 		} else if (vb.getOid().compareTo(targetOID) <= 0) {
-			System.out.println("[true] Variable received is not "
-					+ "lexicographic successor of requested " + "one:");
-			System.out.println(vb.toString() + " <= " + targetOID);
+			result += "[true] Variable received is not "
+					+ "lexicographic successor of requested " + "one:\n";
+			result += vb.toString() + " <= " + targetOID + "\n";
 			finished = true;
 		}
 		return finished;

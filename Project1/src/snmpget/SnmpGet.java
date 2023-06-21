@@ -40,8 +40,9 @@ public class SnmpGet {
 		return target;
 	}
 
-	public static void snmpGet(String ip, String community, String oid) {
+	public static String snmpGet(String ip, String community, String oid) {
 		
+		String result = "-----SNMP query started-----\n";
 		CommunityTarget target = createDefault(ip, community);
 		Snmp snmp = null;
 		try {
@@ -52,24 +53,27 @@ public class SnmpGet {
 			DefaultUdpTransportMapping transport = new DefaultUdpTransportMapping();
 			snmp = new Snmp(transport);
 			snmp.listen();
-			System.out.println("-------> PDU <-------");
+			
+			
 			pdu.setType(PDU.GET);
 			ResponseEvent respEvent = snmp.send(pdu, target);
-			System.out.println("PeerAddress:" + respEvent.getPeerAddress());
+//			System.out.println("PeerAddress:" + respEvent.getPeerAddress());
 			PDU response = respEvent.getResponse();
 			if (response == null) {
-				System.out.println("response is null, request time out");
+				result += "response is null, request time out.\n";
 			} else {
-				System.out.println("response pdu size is " + response.size());
+//				System.out.println("response pdu size is " + response.size());
 				for (int i = 0; i < response.size(); i++) {
 					VariableBinding vb = response.get(i);
-					System.out.println(vb.getOid() + " = " + vb.getVariable());
+					result += vb.getVariable() +"\n";
+					result += "Total request: " + response.size() + ".\n";
+//					System.out.println(vb.getOid() + " = " + vb.getVariable());
 					}
 				}
-				System.out.println("SNMP GET one OID value finished !");
+//				System.out.println("SNMP GET one OID value finished !");
 			} catch (Exception e) {
 				e.printStackTrace();
-				System.out.println("SNMP Get Exception:" + e);
+				result = "SNMP Get Exception:" + e +".\n";
 			} finally {
 				if (snmp != null) {
 					try {
@@ -80,6 +84,7 @@ public class SnmpGet {
 				}
 
 			}
+		return result += "-----SNMP query finished-----";
 		}
 
 	public static void snmpGetList(String ip, String community, List<String> oidList) {
