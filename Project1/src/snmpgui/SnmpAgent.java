@@ -24,6 +24,7 @@ public class SnmpAgent extends Application{
 	public void start(Stage stage) {
 		
 		//creating label and Text Field
+		
 		Text text1 = new Text("Name:");
 		textField1 = new TextField();
 		
@@ -83,7 +84,7 @@ public class SnmpAgent extends Application{
 		            String community = textField3.getText();
 		            String port = textField4.getText();
 		           
-		            NodeInfo nodeInfo = new NodeInfo(name,ipAddress,community,port);
+		            SnmpBrowser nodeInfo = new SnmpBrowser(name,ipAddress,community,port);
 	                Stage nodeInfoStage = new Stage();
 	                nodeInfo.start(nodeInfoStage);
 	                stage.close();

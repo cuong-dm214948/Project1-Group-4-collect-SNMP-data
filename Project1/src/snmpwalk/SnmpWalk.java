@@ -40,12 +40,12 @@ public class SnmpWalk {
 		target.setRetries(DEFAULT_RETRY);
 		return target;
 	}
-	private static  String result;
+	private static String result = "-----SNMP query started-----\n";
 	public static String snmpWalk(String ip, String community, String targetOid) {
-		result = "-----SNMP query started-----\n";
 		CommunityTarget target = createDefault(ip, community);
 		TransportMapping transport = null;
 		Snmp snmp = null;
+		
 		try {
 			transport = new DefaultUdpTransportMapping();
 			snmp = new Snmp(transport);
@@ -72,8 +72,9 @@ public class SnmpWalk {
 				// check finish
 				finished = checkWalkFinished(targetOID, pdu, vb);
 				if (!finished) {
-					result += "Total request: " + response.size() + ".\n";
-
+					result += "==== walk each value :\n";
+					
+					result += vb.getOid() + " = " + vb.getVariable();
 					// Set up the variable binding for the next entry.
 					pdu.setRequestID(new Integer32(0));
 					pdu.set(0, vb);
@@ -85,7 +86,7 @@ public class SnmpWalk {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			result += "SNMP walk Exception: " + e +".\n";
+			result += "SNMP walk Exception: " + e;
 		} finally {
 			if (snmp != null) {
 				try {
@@ -95,7 +96,7 @@ public class SnmpWalk {
 				}
 			}
 		}
-		return result += "-----SNMP query finished-----";
+		return result += "-----SNMP query finished-----\n";
 	}
 
 	private static boolean checkWalkFinished(OID targetOID, PDU pdu,
