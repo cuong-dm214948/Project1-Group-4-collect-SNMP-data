@@ -1,13 +1,22 @@
 
 # môi trường cài đặt: 
 
-window,linux
+window,linux,
+# GUI demo:
+
+https://balsamiq.cloud/su3lahn/pke1es4
 
 # thư viện sử dụng:
 
 https://ireasoning.com/mibbrowser.shtml
 
 https://www.snmp4j.org/
+
+https://maven.apache.org/download.cgi
+
+https://openjfx.io/
+
+https://jar-download.com/artifact-search/jackson-databind
 
 # cách cài đặt và triển khai:
 
