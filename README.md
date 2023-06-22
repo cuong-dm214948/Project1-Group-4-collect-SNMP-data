@@ -14,8 +14,9 @@ Email: cuong.dm214948@sis.hust.edu.vn
 # Overview
 Simple Network Management Protocol (SNMP) is an Internet Standard protocol for collecting and organizing information about managed devices on IP networks and for modifying that information to change device behaviour.
 
+# GUI
 
-
+https://balsamiq.cloud/su3lahn/pke1es4/rF66D)https://balsamiq.cloud/su3lahn/pke1es4/rF66D
 
 
 
