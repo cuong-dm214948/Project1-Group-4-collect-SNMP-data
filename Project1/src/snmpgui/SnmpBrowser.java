@@ -48,7 +48,7 @@ public class SnmpBrowser extends Application {
 	private String community;
 	private String port;
 	
-	public SnmpBrowser(String name,String ipAddress,String community,String port) {
+	public SnmpBrowser(String  name,String ipAddress,String community,String port) {
 		this.name = name;
 		this.ipAddress = ipAddress;
 		this.community = community;
