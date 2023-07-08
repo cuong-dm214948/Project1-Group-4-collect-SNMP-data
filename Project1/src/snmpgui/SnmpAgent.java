@@ -1,5 +1,5 @@
 package snmpgui;
-//46.172.188.23
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

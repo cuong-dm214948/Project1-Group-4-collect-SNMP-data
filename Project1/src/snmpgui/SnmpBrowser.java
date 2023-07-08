@@ -1,9 +1,7 @@
 package snmpgui;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javafx.scene.control.MenuItem;
 import java.io.IOException;
@@ -72,24 +70,9 @@ public class SnmpBrowser extends Application {
             menuItem.setOnAction(event -> {
                 menuButton.setText(finalMenuItem.getText());
                 ipAddress1 = account.getIpAddress();
-                community1 = account.getCommunity();
-                System.out.println("IP Address: " + ipAddress1);
-                System.out.println("Community: " + community1);
-                
+                community1 = account.getCommunity();               
             });
-        }
-        
-        System.out.println("IP Address: " + ipAddress1);
-        System.out.println("Community: " + community1);
-        
-
-//            menuItem.setOnAction(event -> {
-//                // Display the info for the selected menu item
-//            SnmpProfile nodeInfo = new SnmpProfile();
-//            Stage stage1 = new Stage();
-//            nodeInfo.start(stage1);
-//            stage.close();
-//            });
+        }       
 		
         TreeView<String> treeView = new TreeView<>();
         treeView.setPrefSize(400, 200);//width, height
@@ -120,7 +103,8 @@ public class SnmpBrowser extends Application {
         	root.getChildren().addAll(rootNode1, rootNode2, rootNode3);
         	treeView.setRoot(root);
         } catch (IOException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+        	e.getMessage();
         }
         
         treeView.setOnMouseClicked(event -> {
@@ -232,8 +216,7 @@ public class SnmpBrowser extends Application {
 	    hbox.setStyle("-fx-background-color: BEIGE;");
 	    
 	    GridPane gridPane2 = new GridPane();
-		gridPane2.setStyle("-fx-background-color: BEIGE;");
-		//	gridPane.setMinSize(1000, 1000);	
+		gridPane2.setStyle("-fx-background-color: BEIGE;");	
 		gridPane2.setPadding(new Insets(5, 5, 5, 5));	
 		//Setting the vertical and horizontal gaps between the columns
 		gridPane2.setVgap(5);
@@ -241,10 +224,8 @@ public class SnmpBrowser extends Application {
 		
 		//Setting the Grid alignment
 		gridPane2.setAlignment(Pos.TOP_LEFT);
-//		gridPane2.add(menuButton, 0, 0);
 		gridPane2.add(treeView, 0, 1);
 		gridPane2.add(gridPane, 0, 2);
-//		gridPane2.add(hbox, 0, 3);
 		
 	    GridPane gridPane3 = new GridPane();
 		gridPane3.setStyle("-fx-background-color: BEIGE;");
