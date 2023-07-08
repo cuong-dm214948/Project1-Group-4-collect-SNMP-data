@@ -85,8 +85,8 @@ public class SnmpWalk {
 			}
 			
 		} catch (Exception e) {
-			e.printStackTrace();
-			result += "SNMP walk Exception: " + e;
+//			e.printStackTrace();
+			result += "SNMP walk Exception: " + e.getMessage();
 		} finally {
 			if (snmp != null) {
 				try {
