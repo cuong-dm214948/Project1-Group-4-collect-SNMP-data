@@ -1,12 +1,8 @@
 package snmpgetnext;
 
-import java.util.List;
 import java.io.IOException;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 import org.snmp4j.CommunityTarget;
-import org.snmp4j.event.ResponseListener;
 import org.snmp4j.PDU;
 import org.snmp4j.Snmp;
 import org.snmp4j.event.ResponseEvent;
@@ -68,8 +64,8 @@ public class SnmpGetNext {
 				}
 //				System.out.println("SNMP GET one OID value finished !");
 			} catch (Exception e) {
-				e.printStackTrace();
-				result += "SNMP Get Exception:" + e +".\n";
+//				e.printStackTrace();
+				result += "SNMP Get Exception:" + e.getMessage()+".\n";
 			} finally {
 				if (snmp != null) {
 					try {
