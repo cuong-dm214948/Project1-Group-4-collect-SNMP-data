@@ -1,12 +1,7 @@
 package snmpget;
 
-import java.util.List;
 import java.io.IOException;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-
 import org.snmp4j.CommunityTarget;
-import org.snmp4j.event.ResponseListener;
 import org.snmp4j.PDU;
 import org.snmp4j.Snmp;
 import org.snmp4j.event.ResponseEvent;
@@ -18,6 +13,7 @@ import org.snmp4j.smi.OctetString;
 import org.snmp4j.smi.VariableBinding;
 import org.snmp4j.transport.DefaultUdpTransportMapping;
 
+
 public class SnmpGet {
 
 	public static final int DEFAULT_VERSION = SnmpConstants.version2c;
@@ -25,7 +21,6 @@ public class SnmpGet {
 	public static final int DEFAULT_PORT = 161;
 	public static final long DEFAULT_TIMEOUT = 3 * 1000L;
 	public static final int DEFAULT_RETRY = 3;
-
 
 	public static CommunityTarget createDefault(String ip, String community) {
 		
@@ -67,8 +62,7 @@ public class SnmpGet {
 					}
 			}
 			} catch (Exception e) {
-				e.printStackTrace();
-				result = "SNMP Get Exception:" + e +".\n";
+				result = "SNMP Get Exception:" + e.getMessage() +".\n";
 			} finally {
 				if (snmp != null) {
 					try {
