@@ -1,5 +1,8 @@
 package snmpgui;
-import java.io.*;
+//46.172.188.23
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -14,13 +17,23 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class SnmpAgent extends Application {
     private TextField textField1;
     private TextField textField2;
     private TextField textField3;
     private TextField textField4;
 
-    private static final String FILE_NAME = "snmp_agent_info.txt";
+    private static final String FILE_NAME = "Account.json";
+    
+    private String name;
+    private String ipAddress;
+    private String community;
+    private String port;
 
     @Override
     public void start(Stage stage) {
@@ -76,23 +89,23 @@ public class SnmpAgent extends Application {
         root.setCenter(hbox);
 
         // Read data from file if it exists
-        readDataFromFile();
+        readAccountsFromFile();
 
-        gridPane.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+        root.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent arg0) {
                 button1.setOnAction(event -> {
-                    String name = textField1.getText();
-                    String ipAddress = textField2.getText();
-                    String community = textField3.getText();
-                    String port = textField4.getText();
+                    name = textField1.getText();
+                    ipAddress = textField2.getText();
+                    community = textField3.getText();
+                    port = textField4.getText();
 
                     // Store data to file
                     storeDataToFile(name, ipAddress, community, port);
 
-                    SnmpBrowser nodeInfo = new SnmpBrowser(name, ipAddress, community, port);
-                    Stage nodeInfoStage = new Stage();
-                    nodeInfo.start(nodeInfoStage);
+                    SnmpBrowser nodeInfo = new SnmpBrowser();
+                    Stage stage1 = new Stage();
+                    nodeInfo.start(stage1);
                     stage.close();
                 });
             }
@@ -110,40 +123,73 @@ public class SnmpAgent extends Application {
         // Displaying the contents of the stage
         stage.show();
     }
-
     private void storeDataToFile(String name, String ipAddress, String community, String port) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME))) {
-            writer.write(name);
-            writer.newLine();
-            writer.write(ipAddress);
-            writer.newLine();
-            writer.write(community);
-            writer.newLine();
-            writer.write(port);
-        } catch (IOException e) {
-            System.out.println("Error writing to file: " + e.getMessage());
-        }
+    	try {
+    	    ObjectMapper objectMapper = new ObjectMapper();
+
+    	    // Read existing accounts from the file
+    	    List<Account> accountList;
+
+    	    // Check if the file exists
+    	    File file = new File(FILE_NAME);
+    	    if (file.exists()) {
+    	        // If the file exists, read the existing accounts from it
+    	        accountList = objectMapper.readValue(file, new TypeReference<List<Account>>() {});
+
+    	        // Check if the new account's ipAddress already exists in the file
+    	        boolean ipAddressExists = accountList.stream()
+    	                .anyMatch(account -> account.getIpAddress().equals(ipAddress));
+
+    	        if (ipAddressExists) {
+    	            System.out.println("The account with the specified ipAddress already exists. " +
+    	                    "Skipping adding the new account.");
+    	            return; // Skip adding the new account
+    	        }
+    	    } else {
+    	        // If the file does not exist, create a new list
+    	        accountList = new ArrayList<>();
+    	    }
+
+    	    // Add the new account
+    	    Account account = new Account(name, ipAddress, community, port);
+    	    accountList.add(account);
+
+    	    // Write the updated account list to the file
+    	    objectMapper.writeValue(file, accountList);
+    	} catch (IOException e) {
+    	    System.out.println("Error writing to file: " + e.getMessage());
+    	}
+
     }
 
-    private void readDataFromFile() {
-        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) {
-            String name = reader.readLine();
-            String ipAddress = reader.readLine();
-            String community = reader.readLine();
-            String port = reader.readLine();
+    private void readAccountsFromFile() {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
 
-            if (name != null && ipAddress != null && community != null && port != null) {
-                textField1.setText(name);
-                textField2.setText(ipAddress);
-                textField3.setText(community);
-                textField4.setText(port);
+            File file = new File(FILE_NAME);
+            if (file.exists()) {
+                // Read the existing account list from the file
+                List<Account> accountList = objectMapper.readValue(file, new TypeReference<List<Account>>() {});
+                
+                if (!accountList.isEmpty()) {
+                    Account firstAccount = accountList.get(0);
+                    textField1.setText(firstAccount.getName());
+                    textField2.setText(firstAccount.getIpAddress());
+                    textField3.setText(firstAccount.getCommunity());
+                    textField4.setText(firstAccount.getPort());
+                }
             }
+            
         } catch (IOException e) {
-            System.out.println("Error reading from file: " + e.getMessage());
+           System.out.println("Error reading from file: " + e.getMessage());
         }
+//        return new ArrayList<>();
     }
 
     public static void main(String args[]) {
         launch(args);
     }
 }
+
+
+
