@@ -82,122 +82,122 @@ public class SnmpGet {
 		return result;
 		}
 
-	public static void snmpGetList(String ip, String community, List<String> oidList) {
-		CommunityTarget target = createDefault(ip, community);
-		Snmp snmp = null;
-		try {
-			PDU pdu = new PDU();
-
-			for(String oid:oidList)
-			{
-				pdu.add(new VariableBinding(new OID(oid)));
-			}
-
-			DefaultUdpTransportMapping transport = new DefaultUdpTransportMapping();
-			snmp = new Snmp(transport);
-			snmp.listen();
-			System.out.println("-------> PDU <-------");
-			pdu.setType(PDU.GET);
-			ResponseEvent respEvent = snmp.send(pdu, target);
-			System.out.println("PeerAddress:" + respEvent.getPeerAddress());
-			PDU response = respEvent.getResponse();
-
-			if (response == null) {
-				System.out.println("response is null, request time out");
-			} else {
-
-				System.out.println("response pdu size is " + response.size());
-				for (int i = 0; i < response.size(); i++) {
-					VariableBinding vb = response.get(i);
-					System.out.println(vb.getOid() + " = " + vb.getVariable());
-				}
-
-			}
-			System.out.println("SNMP GET one OID value finished !");
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("SNMP Get Exception:" + e);
-		} finally {
-			if (snmp != null) {
-				try {
-					snmp.close();
-				} catch (IOException ex1) {
-					snmp = null;
-				}
-			}
-
-		}
-	}
-	
-	public static void snmpAsynGetList(String ip, String community,List<String> oidList){
-		CommunityTarget target = createDefault(ip, community);
-		Snmp snmp = null;
-		try {
-			PDU pdu = new PDU();
-
-			for(String oid:oidList)
-			{
-				pdu.add(new VariableBinding(new OID(oid)));
-			}
-
-			DefaultUdpTransportMapping transport = new DefaultUdpTransportMapping();
-			snmp = new Snmp(transport);
-			snmp.listen();
-			System.out.println("-------> PDU <-------");
-			pdu.setType(PDU.GET);
-			ResponseEvent respEvent = snmp.send(pdu, target);
-			System.out.println("PeerAddress:" + respEvent.getPeerAddress());
-			PDU response = respEvent.getResponse();
-
-			/*异步获取*/
-			final CountDownLatch latch = new CountDownLatch(1);
-			ResponseListener listener = new ResponseListener() {
-				public void onResponse(ResponseEvent event) {
-					((Snmp) event.getSource()).cancel(event.getRequest(), this);
-					PDU response = event.getResponse();
-					PDU request = event.getRequest();
-					System.out.println("[request]:" + request);
-					if (response == null) {
-						System.out.println("[ERROR]: response is null");
-					} else if (response.getErrorStatus() != 0) {
-						System.out.println("[ERROR]: response status"
-								+ response.getErrorStatus() + " Text:"
-								+ response.getErrorStatusText());
-					} else {
-						System.out.println("Received response Success!");
-						for (int i = 0; i < response.size(); i++) {
-							VariableBinding vb = response.get(i);
-							System.out.println(vb.getOid() + " = "
-									+ vb.getVariable());
-						}
-						System.out.println("SNMP Asyn GetList OID finished. ");
-						latch.countDown();
-					}
-				}
-			};
-
-			pdu.setType(PDU.GET);
-			snmp.send(pdu, target, null, listener);
-			System.out.println("asyn send pdu wait for response...");
-
-			boolean wait = latch.await(30, TimeUnit.SECONDS);
-			System.out.println("latch.await =:" + wait);
-
-			snmp.close();
-
-			System.out.println("SNMP GET one OID value finished !");
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("SNMP Get Exception:" + e);
-		} finally {
-			if (snmp != null) {
-				try {
-					snmp.close();
-				} catch (IOException ex1) {
-					snmp = null;
-				}
-			}
-
-		}
-	}
+//	public static void snmpGetList(String ip, String community, List<String> oidList) {
+//		CommunityTarget target = createDefault(ip, community);
+//		Snmp snmp = null;
+//		try {
+//			PDU pdu = new PDU();
+//
+//			for(String oid:oidList)
+//			{
+//				pdu.add(new VariableBinding(new OID(oid)));
+//			}
+//
+//			DefaultUdpTransportMapping transport = new DefaultUdpTransportMapping();
+//			snmp = new Snmp(transport);
+//			snmp.listen();
+//			System.out.println("-------> PDU <-------");
+//			pdu.setType(PDU.GET);
+//			ResponseEvent respEvent = snmp.send(pdu, target);
+//			System.out.println("PeerAddress:" + respEvent.getPeerAddress());
+//			PDU response = respEvent.getResponse();
+//
+//			if (response == null) {
+//				System.out.println("response is null, request time out");
+//			} else {
+//
+//				System.out.println("response pdu size is " + response.size());
+//				for (int i = 0; i < response.size(); i++) {
+//					VariableBinding vb = response.get(i);
+//					System.out.println(vb.getOid() + " = " + vb.getVariable());
+//				}
+//
+//			}
+//			System.out.println("SNMP GET one OID value finished !");
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			System.out.println("SNMP Get Exception:" + e);
+//		} finally {
+//			if (snmp != null) {
+//				try {
+//					snmp.close();
+//				} catch (IOException ex1) {
+//					snmp = null;
+//				}
+//			}
+//
+//		}
+//	}
+//	
+//	public static void snmpAsynGetList(String ip, String community,List<String> oidList){
+//		CommunityTarget target = createDefault(ip, community);
+//		Snmp snmp = null;
+//		try {
+//			PDU pdu = new PDU();
+//
+//			for(String oid:oidList)
+//			{
+//				pdu.add(new VariableBinding(new OID(oid)));
+//			}
+//
+//			DefaultUdpTransportMapping transport = new DefaultUdpTransportMapping();
+//			snmp = new Snmp(transport);
+//			snmp.listen();
+//			System.out.println("-------> PDU <-------");
+//			pdu.setType(PDU.GET);
+//			ResponseEvent respEvent = snmp.send(pdu, target);
+//			System.out.println("PeerAddress:" + respEvent.getPeerAddress());
+//			PDU response = respEvent.getResponse();
+//
+//			/*异步获取*/
+//			final CountDownLatch latch = new CountDownLatch(1);
+//			ResponseListener listener = new ResponseListener() {
+//				public void onResponse(ResponseEvent event) {
+//					((Snmp) event.getSource()).cancel(event.getRequest(), this);
+//					PDU response = event.getResponse();
+//					PDU request = event.getRequest();
+//					System.out.println("[request]:" + request);
+//					if (response == null) {
+//						System.out.println("[ERROR]: response is null");
+//					} else if (response.getErrorStatus() != 0) {
+//						System.out.println("[ERROR]: response status"
+//								+ response.getErrorStatus() + " Text:"
+//								+ response.getErrorStatusText());
+//					} else {
+//						System.out.println("Received response Success!");
+//						for (int i = 0; i < response.size(); i++) {
+//							VariableBinding vb = response.get(i);
+//							System.out.println(vb.getOid() + " = "
+//									+ vb.getVariable());
+//						}
+//						System.out.println("SNMP Asyn GetList OID finished. ");
+//						latch.countDown();
+//					}
+//				}
+//			};
+//
+//			pdu.setType(PDU.GET);
+//			snmp.send(pdu, target, null, listener);
+//			System.out.println("asyn send pdu wait for response...");
+//
+//			boolean wait = latch.await(30, TimeUnit.SECONDS);
+//			System.out.println("latch.await =:" + wait);
+//
+//			snmp.close();
+//
+//			System.out.println("SNMP GET one OID value finished !");
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			System.out.println("SNMP Get Exception:" + e);
+//		} finally {
+//			if (snmp != null) {
+//				try {
+//					snmp.close();
+//				} catch (IOException ex1) {
+//					snmp = null;
+//				}
+//			}
+//
+//		}
+//	}
 }
