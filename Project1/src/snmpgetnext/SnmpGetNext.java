@@ -41,7 +41,7 @@ public class SnmpGetNext {
 	}
 
 	public static String snmpGetNext(String ip, String community, String oid) {
-		String result = "-----SNMP query started-----\n";
+		String result = "";
 		CommunityTarget target = createDefault(ip, community);
 		Snmp snmp = null;
 		try {
@@ -58,13 +58,12 @@ public class SnmpGetNext {
 //			System.out.println("PeerAddress:" + respEvent.getPeerAddress());
 			PDU response = respEvent.getResponse();
 			if (response == null) {
-				result += "response is null, request time out.\n";
+				result += "Response is null, request time out.\n";
 			} else {
 //				System.out.println("response pdu size is " + response.size());
 				for (int i = 0; i < response.size(); i++) {
 					VariableBinding vb = response.get(i);
 					result += vb.getVariable() +"\n";
-					result += "Total request: " + response.size() + ".\n";
 					}
 				}
 //				System.out.println("SNMP GET one OID value finished !");
@@ -81,6 +80,6 @@ public class SnmpGetNext {
 				}
 
 			}
-		return result += "-----SNMP query finished-----";
+		return result;
 		}
 }

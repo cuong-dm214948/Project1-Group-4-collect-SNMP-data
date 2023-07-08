@@ -1,9 +1,14 @@
 package snmpgui;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.MenuItem;
+
 import java.io.File;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javafx.scene.control.MenuItem;
 import java.io.IOException;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -13,6 +18,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.MenuButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -24,63 +30,105 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.scene.control.TextArea;
 
+
 public class SnmpBrowser extends Application {
 	
     private TextField textField1;
     private TextField textField2;
     private TextField textField3;
-    private TextField textField4;
     private TextField textField5;
     private TextField textField6;
     private TextField textField7;
     private TextField textField8;
     private TextField textField9;
-    private TextField textField10;
     private TextArea textField11;
-    private TreeItem<String> rootNode;
-    private JsonNode rootNodeValue;
+    private JsonNode jsonRoot1;
+    private JsonNode jsonRoot2;
+    private JsonNode jsonRoot3;
     private MenuButton menuButton;
 	
-	private static final String JSON_FILE_PATH = "SNMPv2-MIB.json";
+    private static final String FILE_NAME = "Account.json";
+	private static final String JSON_FILE_PATH1 = "SNMPv2-MIB.json";
+	private static final String JSON_FILE_PATH2 = "HOST-RESOURCES-MIB.json";
+	private static final String JSON_FILE_PATH3 = "IF-MIB.json";
 	
-	private String name;
-	private String ipAddress;
-	private String community;
-	private String port;
+	private String ipAddress1;
+	private String community1;
 	
-	public SnmpBrowser(String  name,String ipAddress,String community,String port) {
-		this.name = name;
-		this.ipAddress = ipAddress;
-		this.community = community;
-		this.port = port;
-	}
 	@Override
 	public void start(Stage stage) { 
-        menuButton = new MenuButton("Host   ");
+        menuButton = new MenuButton("   Host   ");
 
-        // Create menu items
-        MenuItem item1 = new MenuItem(name);
-        MenuItem item2 = new MenuItem("");
-        MenuItem item3 = new MenuItem("");
+        // Read the accounts from the JSON file
+        List<Account> accountList = readAccountsFromFile();
+        // ...
+    	
+        for (Account account : accountList) {
+            MenuItem menuItem = new MenuItem(account.getName());
+            menuButton.getItems().add(menuItem);
 
-        // Add menu items to the menu button
-        menuButton.getItems().addAll(item1, item2, item3);
+            final MenuItem finalMenuItem = menuItem; // Create a final copy of menuItem
+
+            menuItem.setOnAction(event -> {
+                menuButton.setText(finalMenuItem.getText());
+                ipAddress1 = account.getIpAddress();
+                community1 = account.getCommunity();
+                System.out.println("IP Address: " + ipAddress1);
+                System.out.println("Community: " + community1);
+                
+            });
+        }
+        
+        System.out.println("IP Address: " + ipAddress1);
+        System.out.println("Community: " + community1);
+        
+
+//            menuItem.setOnAction(event -> {
+//                // Display the info for the selected menu item
+//            SnmpProfile nodeInfo = new SnmpProfile();
+//            Stage stage1 = new Stage();
+//            nodeInfo.start(stage1);
+//            stage.close();
+//            });
 		
-		TreeView<String> treeView = new TreeView<>();
+        TreeView<String> treeView = new TreeView<>();
         treeView.setPrefSize(400, 200);//width, height
         
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode jsonRoot = objectMapper.readTree(new File(JSON_FILE_PATH));
+        	// Create the ObjectMapper
+        	ObjectMapper objectMapper = new ObjectMapper();
 
-            rootNode = createTreeItem(jsonRoot);
-            rootNodeValue = jsonRoot;
-            treeView.setRoot(rootNode);
+        	// Read the JSON files and obtain the root nodes for each file
+        	jsonRoot1 = objectMapper.readTree(new File(JSON_FILE_PATH1));
+        	jsonRoot2 = objectMapper.readTree(new File(JSON_FILE_PATH2));
+        	jsonRoot3 = objectMapper.readTree(new File(JSON_FILE_PATH3));
+
+        	// Create the common root item
+        	TreeItem<String> root = new TreeItem<>("MIB Tree");
+
+        	// Create the branch items
+        	TreeItem<String> rootNode1 = new TreeItem<>("SNMPv2-MIB");
+        	TreeItem<String> rootNode2 = new TreeItem<>("HOST RESOURCE-MIB");
+        	TreeItem<String> rootNode3 = new TreeItem<>("IF-MIB");
+
+        	// Build the tree structure for each branch
+        	createTreeItem(jsonRoot1, rootNode1);
+        	createTreeItem(jsonRoot2, rootNode2);
+        	createTreeItem(jsonRoot3, rootNode3);
+
+        	// Add the branch items to the common root item
+        	root.getChildren().addAll(rootNode1, rootNode2, rootNode3);
+        	treeView.setRoot(root);
         } catch (IOException e) {
             e.printStackTrace();
         }
         
-        treeView.setOnMouseClicked(event -> handleTreeItemClick(treeView.getSelectionModel().getSelectedItem()));
+        treeView.setOnMouseClicked(event -> {
+            TreeItem<String> selectedItem = treeView.getSelectionModel().getSelectedItem();
+            handleTreeItemClick(selectedItem, jsonRoot1);
+            handleTreeItemClick(selectedItem, jsonRoot2);
+            handleTreeItemClick(selectedItem, jsonRoot3);
+        });
 		//creating label and Text Field
 		Text text1 = new Text("Name:");
 		textField1 = new TextField();
@@ -90,9 +138,6 @@ public class SnmpBrowser extends Application {
 		
 		Text text3 = new Text("Composed Type:");
 		textField3 = new TextField();
-		
-		Text text4 = new Text("Base Type:");
-		textField4 = new TextField();
 		
 		Text text5 = new Text("Status:");
 		textField5 = new TextField();
@@ -109,13 +154,11 @@ public class SnmpBrowser extends Application {
 		Text text9 = new Text("Size:");
 		textField9 = new TextField();
 		
-		Text text10 = new Text("Module:");
-		textField10 = new TextField();
-		
 		Text text11 = new Text("Description:");
 		textField11 = new TextArea();
+		textField11.setWrapText(true); 
 		textField11.setPrefColumnCount(31); // Set the preferred number of columns
-		textField11.setPrefRowCount(3);
+		textField11.setPrefRowCount(9);
 		
 		//Creating a Grid Pane
 		GridPane gridPane = new GridPane();
@@ -132,36 +175,30 @@ public class SnmpBrowser extends Application {
 		gridPane.add(textField2, 1, 1);
 		gridPane.add(text3, 0, 2);
 		gridPane.add(textField3, 1, 2);
-		gridPane.add(text4, 0, 3);
-		gridPane.add(textField4, 1, 3);
-		gridPane.add(text5, 0, 4);
-		gridPane.add(textField5, 1, 4);
-		gridPane.add(text6, 0, 5);
-		gridPane.add(textField6, 1, 5);
-		gridPane.add(text7, 0, 6);
-		gridPane.add(textField7, 1, 6);
-		gridPane.add(text8, 0, 7);
-		gridPane.add(textField8, 1, 7);
-		gridPane.add(text9, 0, 8);
-		gridPane.add(textField9, 1, 8);
-		gridPane.add(text10, 0, 9);
-		gridPane.add(textField10, 1, 9);
-		gridPane.add(text11, 0, 10);
-		gridPane.add(textField11, 1, 10);
+		gridPane.add(text5, 0, 3);
+		gridPane.add(textField5, 1, 3);
+		gridPane.add(text6, 0, 4);
+		gridPane.add(textField6, 1, 4);
+		gridPane.add(text7, 0, 5);
+		gridPane.add(textField7, 1, 5);
+		gridPane.add(text8, 0, 6);
+		gridPane.add(textField8, 1, 6);
+		gridPane.add(text9, 0, 7);
+		gridPane.add(textField9, 1, 7);
+		gridPane.add(text11, 0, 8);
+		gridPane.add(textField11, 1, 8);
 		
 		//Styling nodes		
-		text1.setStyle("-fx-font: normal bold 12px 'serif' ");
+		text1.setStyle("-fx-font: normal bold 14px 'serif' ");
 		textField1.setStyle("-fx-font: normal bold 12px 'serif' ");
-		text2.setStyle("-fx-font: normal bold 10px 'serif' ");
-		text3.setStyle("-fx-font: normal bold 10px 'serif' ");
-		text4.setStyle("-fx-font: normal bold 10px 'serif' ");
-		text5.setStyle("-fx-font: normal bold 10px 'serif' ");
-		text6.setStyle("-fx-font: normal bold 10px 'serif' ");
-		text7.setStyle("-fx-font: normal bold 10px 'serif' ");
-		text8.setStyle("-fx-font: normal bold 10px 'serif' ");
-		text9.setStyle("-fx-font: normal bold 10px 'serif' ");
-		text10.setStyle("-fx-font: normal bold 10px 'serif' ");
-		text11.setStyle("-fx-font: normal bold 10px 'serif' ");
+		text2.setStyle("-fx-font: normal bold 12px 'serif' ");
+		text3.setStyle("-fx-font: normal bold 12px 'serif' ");
+		text5.setStyle("-fx-font: normal bold 12px 'serif' ");
+		text6.setStyle("-fx-font: normal bold 12px 'serif' ");
+		text7.setStyle("-fx-font: normal bold 12px 'serif' ");
+		text8.setStyle("-fx-font: normal bold 12px 'serif' ");
+		text9.setStyle("-fx-font: normal bold 12px 'serif' ");
+		text11.setStyle("-fx-font: normal bold 12px 'serif' ");
 		gridPane.setStyle("-fx-background-color: BEIGE;");
 		
 		//creating getconnection
@@ -169,12 +206,16 @@ public class SnmpBrowser extends Application {
 		gridPane1.setStyle("-fx-background-color: BEIGE;");
 		gridPane1.setPrefSize(400, 100);	
 		gridPane1.setPadding(new Insets(5, 5, 5, 5));	
+		//Setting the vertical and horizontal gaps between the columns
 		gridPane1.setVgap(5);
 		gridPane1.setHgap(5);
-		gridPane1.setAlignment(Pos.TOP_RIGHT);
 		
+		//Setting the Grid alignment
+		gridPane1.setAlignment(Pos.TOP_RIGHT);
 		Text text12 = new Text("Query result:");
-		TextArea textField12 = new TextArea();		
+		TextArea textField12 = new TextArea();
+		textField12.setPrefRowCount(32);
+		
 		gridPane1.add(text12, 0, 0);
 		gridPane1.add(textField12, 0, 1);
 			
@@ -186,119 +227,96 @@ public class SnmpBrowser extends Application {
 		button2.setStyle("-fx-background-color: darkslateblue; -fx-text-fill: white;");
 		button3.setStyle("-fx-background-color: darkslateblue; -fx-text-fill: white;");
 		HBox hbox = new HBox(100,button1,button2,button3);
+//		hbox.setPadding(new Insets(0));
 	    hbox.setAlignment(Pos.TOP_CENTER);	    
 	    hbox.setStyle("-fx-background-color: BEIGE;");
 	    
 	    GridPane gridPane2 = new GridPane();
-		gridPane2.setStyle("-fx-background-color: BEIGE;");	
+		gridPane2.setStyle("-fx-background-color: BEIGE;");
+		//	gridPane.setMinSize(1000, 1000);	
 		gridPane2.setPadding(new Insets(5, 5, 5, 5));	
+		//Setting the vertical and horizontal gaps between the columns
 		gridPane2.setVgap(5);
 		gridPane2.setHgap(5);
-		gridPane2.setAlignment(Pos.TOP_LEFT);
 		
-		gridPane2.add(menuButton, 0, 0);
+		//Setting the Grid alignment
+		gridPane2.setAlignment(Pos.TOP_LEFT);
+//		gridPane2.add(menuButton, 0, 0);
 		gridPane2.add(treeView, 0, 1);
 		gridPane2.add(gridPane, 0, 2);
+//		gridPane2.add(hbox, 0, 3);
 		
 	    GridPane gridPane3 = new GridPane();
-		gridPane3.setStyle("-fx-background-color: BEIGE;");	
-		gridPane1.setPrefSize(400, 600);
+		gridPane3.setStyle("-fx-background-color: BEIGE;");
+		gridPane1.setPrefSize(400, 600);	
 		gridPane3.setPadding(new Insets(5, 5, 5, 5));	
+		//Setting the vertical and horizontal gaps between the columns
 		gridPane3.setVgap(5);
 		gridPane3.setHgap(5);
+		
+		//Setting the Grid alignment
 		gridPane3.setAlignment(Pos.TOP_LEFT);
-		
+		gridPane3.add(menuButton, 0, 0);
+		gridPane3.add(hbox, 1, 0);		
+		gridPane3.add(gridPane2, 0, 1);
 		gridPane3.add(gridPane1, 1, 1);
-		gridPane3.add(hbox, 1, 0);
 		
-		GridPane gridPane4 = new GridPane();
-		gridPane4.setStyle("-fx-background-color: BEIGE;");	
-		gridPane4.setPadding(new Insets(5, 5, 5, 5));	
-		gridPane4.setVgap(5);
-		gridPane4.setHgap(5);
-		gridPane4.setAlignment(Pos.TOP_LEFT);
-		
-		gridPane4.add(gridPane2, 0, 0);
-		gridPane4.add(gridPane3, 1, 0);
-		
-		item1.setOnAction(event -> {
-            menuButton.setText(item1.getText());
-            // 
-        });
-
-        item2.setOnAction(event -> {
-            menuButton.setText(item2.getText());
-            // 
-        });
-
-        item3.setOnAction(event -> {
-            menuButton.setText(item3.getText());
-            // 
-        });
-		
-		gridPane.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+		gridPane3.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0) {
 				button1.setOnAction(event -> {
 				    String oid = textField2.getText() + ".0";
-				    String result = snmpget.SnmpGet.snmpGet(ipAddress,community,oid);
+				    String result = snmpget.SnmpGet.snmpGet(ipAddress1,community1,oid);
 				    textField12.setText(result);
 				});
 			}});
 			
-		gridPane.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+		gridPane3.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0) {
 				button2.setOnAction(event -> {
 				    String oid = textField2.getText() + ".0";
-				    String result = snmpgetnext.SnmpGetNext.snmpGetNext(ipAddress,community,oid);
+				    String result = snmpgetnext.SnmpGetNext.snmpGetNext(ipAddress1,community1,oid);
 				    textField12.setText(result);
 				});
 			}});
 			
-		gridPane.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+		gridPane3.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent arg0) {
 				button3.setOnAction(event -> {
 				    String oid = textField2.getText();
-				    String result = snmpwalk.SnmpWalk.snmpWalk(ipAddress,community,oid);
+				    String result = snmpwalk.SnmpWalk.snmpWalk(ipAddress1,community1,oid);
 				    textField12.setText(result);
 				});
 			}});
 				
 		BorderPane root = new BorderPane();
-	    root.setTop(gridPane4);
+	    root.setTop(gridPane3);
 		Scene scene1 = new Scene(root,840,630);//width,height
 		stage.setTitle("Snmp");
 		stage.setScene(scene1);
 		stage.show();
 	}
 	
-    private TreeItem<String> createTreeItem(JsonNode node) {
-        TreeItem<String> item = new TreeItem<>(node.getNodeType().toString());
+	private void createTreeItem(JsonNode jsonNode, TreeItem<String> parentItem) {
+	    // Iterate over the fields or elements of the JSON node
+	    jsonNode.fields().forEachRemaining(entry -> {
+	        JsonNode childNode = entry.getValue();
+	        // Create a TreeItem with the name as the label
+	        TreeItem<String> childItem = new TreeItem<>();
+	        childItem.setValue(entry.getKey());
+	        parentItem.getChildren().add(childItem);
 
-        if (node.isObject()) {
-            node.fields().forEachRemaining(entry -> {
-                TreeItem<String> childItem = createTreeItem(entry.getValue());
-                childItem.setValue(entry.getKey());
-                item.getChildren().add(childItem);
-            });
-        } else if (node.isArray()) {
-            for (JsonNode childNode : node) {
-                TreeItem<String> childItem = createTreeItem(childNode);
-                item.getChildren().add(childItem);
-            }
-        } else {
-            item.setValue(node.asText());
-        }
-
-        return item;
-    }
+	        // Recursively build the tree structure for child nodes
+	        createTreeItem(childNode, childItem);
+	    });
+	}
     
-    private void handleTreeItemClick(TreeItem<String> selectedItem) {
+    private void handleTreeItemClick(TreeItem<String> selectedItem,JsonNode jsonRoot) {
         if (selectedItem != null) {
-            if (selectedItem.getParent() != null && selectedItem.getParent() == rootNode) {
-                JsonNode selectedNode = findNodeByPath(selectedItem.getValue());
+           if (selectedItem.getParent() != null ) {
+                JsonNode selectedNode = findNodeByPath(selectedItem.getValue(),jsonRoot);
 
                 if (selectedNode != null) {
                     String text1 = selectedNode.get("name").asText();
@@ -356,10 +374,10 @@ public class SnmpBrowser extends Application {
         }
     }
 
-    private JsonNode findNodeByPath(String path) {
+    private JsonNode findNodeByPath(String path,JsonNode jsonRoot) {
         String[] parts = path.split("\\.");
 
-        JsonNode currentNode = rootNodeValue;
+        JsonNode currentNode = jsonRoot;
         for (String part : parts) {
             if (currentNode.has(part)) {
                 currentNode = currentNode.get(part);
@@ -369,6 +387,20 @@ public class SnmpBrowser extends Application {
         }
         return currentNode;
     }
+    
+    private List<Account> readAccountsFromFile() {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            File file = new File(FILE_NAME);
+            if (file.exists()) {
+                return objectMapper.readValue(file, new TypeReference<List<Account>>() {});
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading from file: " + e.getMessage());
+        }
+        return List.of(); // Return an empty list if file doesn't exist or there's an error
+    }
+    
     
 	public static void main(String args[]){
 	launch(args);

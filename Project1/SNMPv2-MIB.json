@@ -2,25 +2,7 @@
   "snmpMIB": {
     "name": "snmpMIB",
     "oid": "1.3.6.1.6.3.1",
-    "class": "moduleidentity",
-    "revisions": [
-      {
-        "revision": "2002-10-16 00:00",
-        "description": "This revision of this MIB module was published as RFC 3418."
-      },
-      {
-        "revision": "1995-11-09 00:00",
-        "description": "This revision of this MIB module was published as RFC 1907."
-      },
-      {
-        "revision": "1993-04-01 00:00",
-        "description": "The initial revision of this MIB module was published as RFC 1450."
-      }
-    ],
-    "lastupdated": "200210160000Z",
-    "organization": "IETF SNMPv3 Working Group",
-    "contactinfo": "WG-EMail: snmpv3@lists.tislabs.com Subscribe: snmpv3-request@lists.tislabs.com Co-Chair: Russ Mundy Network Associates Laboratories postal: 15204 Omega Drive, Suite 300 Rockville, MD 20850-4601 USA EMail: mundy@tislabs.com phone: +1 301 947-7107 Co-Chair: David Harrington Enterasys Networks postal: 35 Industrial Way P. O. Box 5005 Rochester, NH 03866-5005 USA EMail: dbh@enterasys.com phone: +1 603 337-2614 Editor: Randy Presuhn BMC Software, Inc. postal: 2141 North First Street San Jose, CA 95131 USA EMail: randy_presuhn@bmc.com phone: +1 408 546-1006",
-    "description": "The MIB module for SNMP entities. Copyright (C) The Internet Society (2002). This version of this MIB module is part of RFC 3418; see the RFC itself for full legal notices. "
+    "class": "moduleidentity"
   },
   "snmpMIBObjects": {
     "name": "snmpMIBObjects",
@@ -1073,14 +1055,5 @@
     ],
     "status": "obsolete",
     "description": "A collection of objects from RFC 1213 made obsolete by this MIB module."
-  },
-  "meta": {
-    "comments": [
-      "ASN.1 source file:///usr/share/snmp/mibs/SNMPv2-MIB.txt",
-      "Produced by pysmi-1.1.10 at Tue Jun 20 10:05:58 2023",
-      "On host MacBook-Pro-cua-ang.local platform Darwin version 22.4.0 by user dangminhduc",
-      "Using Python version 3.10.4 (v3.10.4:9d38120e33, Mar 23 2022, 17:29:05) [Clang 13.0.0 (clang-1300.0.29.30)]"
-    ],
-    "module": "SNMPv2-MIB"
   }
 }
