@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/User/Downloads/jar lib/jackson-annotations-2.15.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/User/Downloads/jar lib/jackson-core-2.15.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/User/Downloads/jar lib/jackson-databind-2.15.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/User/Downloads/jar lib/json-simple-1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/User/Downloads/jar lib/opennms-joesnmp-20031201-173122.jar"/>
+	<classpathentry kind="lib" path="C:/Users/User/Downloads/jar lib/snmp4j-2.5.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/User/Downloads/jar lib/lib/javafx.base.jar"/>
+	<classpathentry kind="lib" path="C:/Users/User/Downloads/jar lib/lib/javafx.controls.jar"/>
+	<classpathentry kind="lib" path="C:/Users/User/Downloads/jar lib/lib/javafx.fxml.jar"/>
+	<classpathentry kind="lib" path="C:/Users/User/Downloads/jar lib/lib/javafx.graphics.jar"/>
+	<classpathentry kind="lib" path="C:/Users/User/Downloads/jar lib/lib/javafx.media.jar"/>
+	<classpathentry kind="lib" path="C:/Users/User/Downloads/jar lib/lib/javafx.swing.jar"/>
+	<classpathentry kind="lib" path="C:/Users/User/Downloads/jar lib/lib/javafx.web.jar"/>
+	<classpathentry kind="lib" path="C:/Users/User/Downloads/jar lib/lib/javafx-swt.jar"/>
+	<classpathentry kind="lib" path="C:/Users/User/Downloads/jar lib/maven-wrapper.jar"/>
+	<classpathentry kind="lib" path="C:/Users/User/Downloads/jar lib/gson-2.8.2.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
