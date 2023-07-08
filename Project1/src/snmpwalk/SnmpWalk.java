@@ -72,14 +72,14 @@ public class SnmpWalk {
 				// check finish
 				finished = checkWalkFinished(targetOID, pdu, vb);
 				if (!finished) {
-//					result += "==== walk each value :\n";
+//					System.out.println( "==== walk each value :\n");
 					
-					result += vb.getOid() + " = " + vb.getVariable();
+					result += vb.getOid() + " = " + vb.getVariable() +"\n";
 					// Set up the variable binding for the next entry.
 					pdu.setRequestID(new Integer32(0));
 					pdu.set(0, vb);
 				} else {
-//					result += "SNMP walk OID has finished.\n";
+					result += "SNMP walk has finished.\n";
 					snmp.close();
 				}
 			}
@@ -113,7 +113,7 @@ public class SnmpWalk {
 			result += "[true] vb.getOid().size() < targetOID.size()\n";
 			finished = true;
 		} else if (targetOID.leftMostCompare(targetOID.size(), vb.getOid()) != 0) {
-			result += "[true] targetOID.leftMostCompare() != 0\n";
+//			result += "[true] targetOID.leftMostCompare() != 0\n";
 			finished = true;
 		} else if (Null.isExceptionSyntax(vb.getVariable().getSyntax())) {
 			result += "[true] Null.isExceptionSyntax(vb.getVariable().getSyntax())\n";
