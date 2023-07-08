@@ -128,72 +128,72 @@ public class SnmpWalk {
 
 	}
 
-	public static void snmpAsynWalk(String ip, String community, String oid) {
-		final CommunityTarget target = createDefault(ip, community);
-		Snmp snmp = null;
-		try {
-			System.out.println("----> demo start <----");
-
-			DefaultUdpTransportMapping transport = new DefaultUdpTransportMapping();
-			snmp = new Snmp(transport);
-			snmp.listen();
-
-			final PDU pdu = new PDU();
-			final OID targetOID = new OID(oid);
-			final CountDownLatch latch = new CountDownLatch(1);
-			pdu.add(new VariableBinding(targetOID));
-
-			ResponseListener listener = new ResponseListener() {
-				public void onResponse(ResponseEvent event) {
-					((Snmp) event.getSource()).cancel(event.getRequest(), this);
-
-					try {
-						PDU response = event.getResponse();
-						// PDU request = event.getRequest();
-						// System.out.println("[request]:" + request);
-						if (response == null) {
-							System.out.println("[ERROR]: response is null");
-						} else if (response.getErrorStatus() != 0) {
-							System.out.println("[ERROR]: response status"
-									+ response.getErrorStatus() + " Text:"
-									+ response.getErrorStatusText());
-						} else {
-							System.out
-							.println("Received Walk response value :");
-							VariableBinding vb = response.get(0);
-
-							boolean finished = checkWalkFinished(targetOID,
-									pdu, vb);
-							if (!finished) {
-								System.out.println(vb.getOid() + " = "
-										+ vb.getVariable());
-								pdu.setRequestID(new Integer32(0));
-								pdu.set(0, vb);
-								((Snmp) event.getSource()).getNext(pdu, target,
-										null, this);
-							} else {
-								System.out.println("SNMP Asyn walk OID value success !");
-								latch.countDown();
-							}
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
-						latch.countDown();
-					}
-
-				}
-			};
-			snmp.getNext(pdu, target, null, listener);
-			System.out.println("pdu ");
-
-			boolean wait = latch.await(30, TimeUnit.SECONDS);
-			System.out.println("latch.await =:" + wait);
-			snmp.close();
-
-			System.out.println("----> demo end <----");
-		} catch (Exception e) {			
-			e.printStackTrace();
-		}
-			System.out.println("SNMP Asyn Walk Exception:" );
-	}
+//	public static void snmpAsynWalk(String ip, String community, String oid) {
+//		final CommunityTarget target = createDefault(ip, community);
+//		Snmp snmp = null;
+//		try {
+//			System.out.println("----> demo start <----");
+//
+//			DefaultUdpTransportMapping transport = new DefaultUdpTransportMapping();
+//			snmp = new Snmp(transport);
+//			snmp.listen();
+//
+//			final PDU pdu = new PDU();
+//			final OID targetOID = new OID(oid);
+//			final CountDownLatch latch = new CountDownLatch(1);
+//			pdu.add(new VariableBinding(targetOID));
+//
+//			ResponseListener listener = new ResponseListener() {
+//				public void onResponse(ResponseEvent event) {
+//					((Snmp) event.getSource()).cancel(event.getRequest(), this);
+//
+//					try {
+//						PDU response = event.getResponse();
+//						// PDU request = event.getRequest();
+//						// System.out.println("[request]:" + request);
+//						if (response == null) {
+//							System.out.println("[ERROR]: response is null");
+//						} else if (response.getErrorStatus() != 0) {
+//							System.out.println("[ERROR]: response status"
+//									+ response.getErrorStatus() + " Text:"
+//									+ response.getErrorStatusText());
+//						} else {
+//							System.out
+//							.println("Received Walk response value :");
+//							VariableBinding vb = response.get(0);
+//
+//							boolean finished = checkWalkFinished(targetOID,
+//									pdu, vb);
+//							if (!finished) {
+//								System.out.println(vb.getOid() + " = "
+//										+ vb.getVariable());
+//								pdu.setRequestID(new Integer32(0));
+//								pdu.set(0, vb);
+//								((Snmp) event.getSource()).getNext(pdu, target,
+//										null, this);
+//							} else {
+//								System.out.println("SNMP Asyn walk OID value success !");
+//								latch.countDown();
+//							}
+//						}
+//					} catch (Exception e) {
+//						e.printStackTrace();
+//						latch.countDown();
+//					}
+//
+//				}
+//			};
+//			snmp.getNext(pdu, target, null, listener);
+//			System.out.println("pdu ");
+//
+//			boolean wait = latch.await(30, TimeUnit.SECONDS);
+//			System.out.println("latch.await =:" + wait);
+//			snmp.close();
+//
+//			System.out.println("----> demo end <----");
+//		} catch (Exception e) {			
+//			e.printStackTrace();
+//		}
+//			System.out.println("SNMP Asyn Walk Exception:" );
+//	}
 }
