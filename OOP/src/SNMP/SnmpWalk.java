@@ -1,4 +1,4 @@
-package com.micmiu.snmp4j.demo1x;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -148,7 +148,7 @@ public class SnmpWalk {
 	 */
 	public static void main(String[] args) {
 
-		String ip = "192.168.8.254";
+		String ip = "192.168.64.5";
 		String community = "public";
 
 		List<String> oidList = new ArrayList<String>();
