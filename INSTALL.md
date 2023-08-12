@@ -1,22 +1,35 @@
 
 # môi trường cài đặt: 
 
-window,linux,
+windows, routers có thể triển khai trên bfsense, ubuntu, linux
+
+
 # GUI demo:
 
 https://balsamiq.cloud/su3lahn/pke1es4
 
 # thư viện sử dụng:
+java:
+https://www.oracle.com/java/technologies/downloads/
 
+parse-mib:
 https://ireasoning.com/mibbrowser.shtml
 
+snmp:
 https://www.snmp4j.org/
 
+maven:
 https://maven.apache.org/download.cgi
 
+javafx for GUI:
 https://openjfx.io/
 
+json:
 https://jar-download.com/artifact-search/jackson-databind
+
+project report:
+https://www.overleaf.com/project/64bdec39f232b3fd69049ab3
+
 
 # cách cài đặt và triển khai:
 
